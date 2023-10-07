@@ -1,14 +1,19 @@
 import { ApolloServer } from 'apollo-server';
 import { resolvers, typeDefs } from './graphql/schema';
-const fetch = (...args) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
+import { context } from './graphql/context';
+import { PostsApi } from './graphql/post/datasource';
+import { UsersApi } from './graphql/user/datasources';
+import { LoginApi } from './graphql/login/datasources';
 
 const server = new ApolloServer({
   typeDefs: typeDefs,
   resolvers: resolvers,
-  context: () => {
+  context: context,
+  dataSources: () => {
     return {
-      fetch,
+      postApi: new PostsApi(),
+      userApi: new UsersApi(),
+      loginApi: new LoginApi(),
     };
   },
 });

@@ -2,8 +2,14 @@ import { gql } from 'apollo-server';
 
 export const userTypeDefs = gql`
   type Query {
-    user(id: String!): User!
-    users: [User!]!
+    user(id: ID!): User!
+    users(input: ApiFiltersInput): [User!]!
+  }
+
+  extend type Mutation {
+    createUser(data: CreateUserInput!): User!
+    updateUser(userId: ID!, data: UpdateUserInput!): User!
+    deleteUser(userId: ID!): Boolean!
   }
 
   type User {
@@ -13,6 +19,20 @@ export const userTypeDefs = gql`
     userName: String!
     indexRef: Int!
     createdAt: String!
-    # posts: [Post!]!
+    posts: [Post!]!
+  }
+
+  input CreateUserInput {
+    firstName: String!
+    lastName: String!
+    userName: String!
+    password: String!
+  }
+
+  input UpdateUserInput {
+    firstName: String
+    lastName: String
+    userName: String
+    password: String!
   }
 `;
